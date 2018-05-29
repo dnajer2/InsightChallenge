@@ -24,6 +24,7 @@ public class May {
 
 
     public static void main(String args[]) {
+        ArrayList<String> keyOrder = new ArrayList<String>(); //holds hashmap entry keys subject for removal
 
         //Hashmap will be used to store all current user settings
         //K=string of user's ip, V= Entry object holding the session's info
@@ -108,6 +109,8 @@ public class May {
                 //and then had the entries removed outside the previous block
                 for (int i=0; i<removal.size(); i++){
                     hmap.remove(removal.get(i));
+                    keyOrder.remove(removal.get(i));
+
                 }
                 removal.clear(); //clear array to prevent repeated lines
 
@@ -129,12 +132,14 @@ public class May {
                     //create new entry into hash map
                     Entry session = new Entry(txt[0], txt[1], txt[2], txt[2], txt[1], 1);
                     hmap.put(txt[0], session);
+                    keyOrder.add(txt[0]);
                 }
             }
              System.out.println(hmap);
 
 
-            //once all the lines have finally been read, the hash map will be flushed of its contents, which will
+            /*
+             //once all the lines have finally been read, the hash map will be flushed of its contents, which will
             //be written into sessionization.txt
             for (HashMap.Entry<String, Entry> entry : hmap.entrySet()) {
                 Entry temp = entry.getValue();
@@ -145,6 +150,25 @@ public class May {
 
 
             }
+            */
+
+
+            /*
+            Originally, I iterated through the hash map to retrieve all the user sessions at the end of the file,
+            but all the entries were not in order.
+
+            In order to keep the proper order, I made an arraylist that keeps track of user sessions as they come in,
+            (deleting any expiring ones along the way). This preserves order, at the expense of more resources/speed
+
+             */
+
+            for (int i=0; i<keyOrder.size(); i++){
+                Entry temp= hmap.get(keyOrder.get(i));
+                  writer.write(temp.name + "," + temp.date + " " + temp.startTime + "," + temp.stopDate +
+                          " " + temp.stopTime + "," + ((toSeconds(temp.stopTime) - toSeconds(temp.startTime)) + 1) +
+                          "," + temp.requests);
+                  writer.write("\r\n");   // write new line
+              }
 
 
             writer.close(); //close sessionization.txt
