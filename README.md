@@ -10,3 +10,4 @@ The first entry in the array(which corresponds to the user ip address/ "name") i
 
 After exiting the while loop, we begin to flush the contents of the hashmap. Initially, I just iterated through the hashmap and printed all the contents of the Entry value. While the contents were the same as the expected outputs, all the lines printed out during the "flush" section of the program were out of order. This resulted in a failing test case. In order to fix this, I backtracked to the beginning of the program and created an arraylist of strings that keeps track of the order the user/keys comes in. Then, at the end, we just iterate through the arraylist of strings, using each one as a key to get its corresponding entry that will then have its contents written out.
 
+(Sorry for not making more test cases. Getting the program to work with the run.sh file took more work than it should have)
